@@ -1,3 +1,3 @@
-#LudumDare25
+##Ludum Dare Game
 ===========
-I am thinking I shall create this game similar to Papa Sangre (all based around 3D sound). Hopefully the them will fit in well with this idea.
+I am thinking I shall create this game similar to Papa Sangre (all based around 3D sound). Hopefully the theme will fit in well with this idea.
