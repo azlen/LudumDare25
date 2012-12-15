@@ -11,7 +11,7 @@ var map = [
 ];
 
 var sounds = {
-	breathing: loadsound('objective.wav', true, true),
+	breathing: loadsound('breathing.wav', true, true),
 	step1: loadsound('step1.wav'),
 	step2: loadsound('step2.wav')
 }
