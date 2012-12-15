@@ -61,7 +61,7 @@ function draw(){
   	
   	ctx.fillRect(player.x+canvas.width/2, player.z+ canvas.height/2, 10, 10);
   	
-  	sounds.breathing.setPosition(Math.cos(mouseX/4)*(player.x/100), 0, Math.sin(mouseX/4)*(player.x/100));
+  	sounds.breathing.setPosition(Math.cos(player.direction/4)*(player.x/100), 0, Math.sin(player.direction/4)*(player.x/100));
   	if(playerdistancetest(0, 0, 50) === true){
   		console.log("yay");
   	}
@@ -69,17 +69,30 @@ function draw(){
   	
   	//player functions
   	if(keys.w === true){
-  		if(frame % 60 === 0){
-  			sounds.step1.volume = 0.3;
-  			sounds.step1.play(0, 0, 0);
-  		}else if(frame % 30 === 0){
-  			sounds.step2.play(0, 0, 0);
-  		}
+  		playstep();
   		player.x += Math.cos(player.direction/(180 / Math.PI)/4 - (45/(180 / Math.PI)))*player.speed;
   		player.z += Math.sin(player.direction/(180 / Math.PI)/4 - (45/(180 / Math.PI)))*player.speed;
+  	}else if(keys.s === true){
+  		playstep();
+  		player.x -= Math.cos(player.direction/(180 / Math.PI)/4 - (45/(180 / Math.PI)))*player.speed;
+  		player.z -= Math.sin(player.direction/(180 / Math.PI)/4 - (45/(180 / Math.PI)))*player.speed;
+  	}
+  	if(keys.a === true){
+  		player.direction -= 4;
+  	}else if(keys.d === true){
+  		player.direction += 4;
   	}
   	
   	requestAnimationFrame(draw);
+}
+
+function playstep(){
+	if(frame % 60 === 0){
+		sounds.step1.volume = 0.3;
+		sounds.step1.play(0, 0, 0);
+	}else if(frame % 30 === 0){
+		sounds.step2.play(0, 0, 0);
+	}
 }
 
 function nwseAdd(){
