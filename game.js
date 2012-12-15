@@ -10,10 +10,10 @@ var map = [
 	
 ];
 
-var sounds = {
-	breathing: loadsound('breathing.wav', true, true),
-	step1: loadsound('step1.wav'),
-	step2: loadsound('step2.wav')
+var s = {
+	breathing: loadsound('breathing.wav', 0, 0, true, true),
+	step1: loadsound('step1.wav', 0, 0),
+	step2: loadsound('step2.wav', 0, 0)
 }
 
 var keys = {
@@ -35,7 +35,7 @@ function draw(){
 	canvas.width = window.innerWidth;
   	canvas.height = window.innerHeight;
   	
-  	for(nwse=-player.direction/4; nwse < -360; nwse+=360){}
+  	for(nwse=-player.direction/4; nwse < -360; nwse+=360){player.direction = nwse}
   	
   	//draw minimal graphics
   	ctx.fillStyle = '#999';
@@ -43,9 +43,13 @@ function draw(){
   	ctx.fillStyle = '#555';
   	ctx.font = 'bold 75px sans-serif';
   	ctx.textAlign = 'center';
-  	ctx.fillText('Sound of Death', canvas.width/2, 75);
+  	ctx.fillText('Necrominously', canvas.width/2, 75);
+  	ctx.font = 'bold 140px sans-serif';
+  	ctx.fillText('~ Evil ~', canvas.width/2, 230);
   	ctx.font = '20px sans-serif';
-  	ctx.fillText('Works in chrome | Please use earphones', canvas.width/2, 100);
+  	ctx.fillText('Revenge                                                       is okay...', canvas.width/2, 170);
+  	ctx.fillText('For it is your future', canvas.width/2, 260);
+  	ctx.fillText('Works in chrome | Please use earphones', canvas.width/2, 110);
   	ctx.fillStyle = '#777';
   	ctx.fillRect(0, canvas.height/2, canvas.width, 10);
   	ctx.fillStyle = '#555';
@@ -60,12 +64,6 @@ function draw(){
   	ctx.fillText('E', (nwse/360)*(canvas.width*4), canvas.height/2+22.5);
   	
   	ctx.fillRect(player.x+canvas.width/2, player.z+ canvas.height/2, 10, 10);
-  	
-  	sounds.breathing.setPosition(Math.cos(player.direction/4)*(player.x/100), 0, Math.sin(player.direction/4)*(player.x/100));
-  	if(playerdistancetest(0, 0, 50) === true){
-  		console.log("yay");
-  	}
-  	
   	
   	//player functions
   	if(keys.w === true){
@@ -83,15 +81,19 @@ function draw(){
   		player.direction += 4;
   	}
   	
+  	audio.listener.setPosition(player.x/100, 0, player.z/100);
+  	audio.listener.setOrientation(Math.cos(player.direction/4/(180/Math.PI)), 0, Math.sin(player.direction/4/(180/Math.PI)), 0, 1, 0);
+  	
   	requestAnimationFrame(draw);
 }
 
 function playstep(){
 	if(frame % 60 === 0){
-		sounds.step1.volume = 0.3;
-		sounds.step1.play(0, 0, 0);
+		s.step1.setPosition(player.x, player.z);
+		s.step1.play();
 	}else if(frame % 30 === 0){
-		sounds.step2.play(0, 0, 0);
+		s.step2.setPosition(player.x, player.z);
+		s.step2.play();
 	}
 }
 
@@ -99,14 +101,6 @@ function nwseAdd(){
 	nwse+=90;
 	if(nwse> 360){
 		nwse-=360;
-	}
-}
-
-function playerdistancetest(x, z, distance){
-	if(player.x < x+distance && player.x > x-distance && player.z > z+distance && player.z > z-distance){
-		return true;
-	}else{
-		return false;
 	}
 }
 

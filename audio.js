@@ -17,14 +17,16 @@ var mainVolume = audio.createGainNode();
 mainVolume.connect(audio.destination);
 
 
-function loadsound(soundFileName, loop, autoplay){
+function loadsound(soundFileName, x, z, loop, autoplay){
         // Create an object with a sound source and a volume control.
         var sound = {};
         sound.isPlaying = false;
         sound.loop = !!loop;
+        
         sound.x = 0;
-        sound.y = 0;
         sound.z = 0;
+        if(x!=undefined){sound.x=x};
+        if(z!=undefined){sound.z=z};
         var request = new XMLHttpRequest();
         request.open("GET", soundFileName, true);
         request.responseType = "arraybuffer";
@@ -35,11 +37,11 @@ function loadsound(soundFileName, loop, autoplay){
 
                 // Make the sound source use the buffer and start playing it.
                 if (autoplay){
-                        sound.play(0,0,0);
+                        sound.play();
                 }
         };
         request.send();
-        sound.play = function(x, y, z){
+        sound.play = function(){
                 sound.source = audio.createBufferSource();
                 sound.volume = audio.createGainNode();
 
@@ -57,7 +59,7 @@ function loadsound(soundFileName, loop, autoplay){
                 sound.volume.connect(sound.panner);
                 // And hook up the panner to the main volume.
                 sound.panner.connect(mainVolume);
-                sound.panner.setPosition(x,y,z);
+                sound.panner.setPosition(sound.x/100,0,sound.z/100);
                 this.source.buffer = audio.createBuffer(this.buffer, false);
                 this.source.noteOn(0); // this has been changed to .start() in the spec
                 sound.isPlaying = true;
@@ -66,12 +68,11 @@ function loadsound(soundFileName, loop, autoplay){
                 sound.source.noteOff(0); // this has been changed to .stop() in the spec
                 sound.isPlaying = false;
         }
-        sound.setPosition = function(x, y, z){
+        sound.setPosition = function(x, z){
         	this.x = x;
-        	this.y = y;
         	this.z = z;
         	if(this.panner){
-        		this.panner.setPosition(this.x, this.y, this.z);
+        		this.panner.setPosition(this.x/100, 0, this.z/100);
         	}
         }
         sound.toggle = function(){
