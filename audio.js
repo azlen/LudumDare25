@@ -17,7 +17,7 @@ var mainVolume = audio.createGainNode();
 mainVolume.connect(audio.destination);
 
 
-function loadsound(soundFileName, x, z, loop, autoplay){
+function loadsound(soundFileName, loop, autoplay){
         // Create an object with a sound source and a volume control.
         var sound = {};
         sound.isPlaying = false;
@@ -25,8 +25,6 @@ function loadsound(soundFileName, x, z, loop, autoplay){
         
         sound.x = 0;
         sound.z = 0;
-        if(x!=undefined){sound.x=x};
-        if(z!=undefined){sound.z=z};
         var request = new XMLHttpRequest();
         request.open("GET", soundFileName, true);
         request.responseType = "arraybuffer";
@@ -41,7 +39,9 @@ function loadsound(soundFileName, x, z, loop, autoplay){
                 }
         };
         request.send();
-        sound.play = function(){
+        sound.play = function(x, z){
+        		if(x!=undefined){this.x = x};
+        		if(z!=undefined){this.z = z};
                 sound.source = audio.createBufferSource();
                 sound.volume = audio.createGainNode();
 
